@@ -11,15 +11,16 @@ Esse projeto consiste na criação de uma API Rest em Flask que integra um model
   GET /cronogramas
 ```
 ```http
-  GET /cronogramas/${id}
-```
-```http
   POST /cronogramas
 ```
 | Parâmetro   | Tipo       |
 | :---------- | :--------- |
 | `id`      | `int` | 
 |`nome`     | `str` |
+
+```http
+  GET /cronogramas/${id}
+```
 
 ```http
   PUT /cronogramas/${id}
@@ -31,4 +32,33 @@ Esse projeto consiste na criação de uma API Rest em Flask que integra um model
 
 ```http
   DELETE /cronogramas/${id}
+```
+
+### Endpoints de eventos
+```http
+  GET /eventos
+```
+```http
+  POST /eventos
+```
+| Parâmetro   | Tipo       |
+| :---------- | :--------- |
+| `id`      | `int` | 
+|`texto`     | `str` |
+|`dia`     | `str` |
+|`id_cronograma`     | `str` |
+
+```http
+  GET /eventos/${id}
+```
+```http
+  PUT /eventos/${id}
+```
+| Parâmetro   | Tipo       |
+| :---------- | :--------- |
+|`texto`     | `str` |
+|`dia`     | `str` |
+
+```http
+  DELETE /eventos/${id}
 ```
