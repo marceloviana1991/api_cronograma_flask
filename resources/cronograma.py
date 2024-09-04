@@ -12,8 +12,20 @@ class Cronogramas(Resource):
     def get(self):
         return {'cronogramas': cronogramas}
     
+    def post(sef):
+        argumentos = reqparse.RequestParser()
+        argumentos.add_argument('id')
+        argumentos.add_argument('nome')
+        dados = argumentos.parse_args()
+        cronograma_objeto = CronogramaModel(
+            id=dados['id'], nome=dados['nome']
+        )
+        novo_cronograma = cronograma_objeto.json()
+        cronogramas.append(novo_cronograma)
+        return novo_cronograma, 201
+    
 
-class CronogramaIdUrl(Resource):
+class CronogramasId(Resource):
     def get(self, id):
         cronograma_encontrado = [cronograma for cronograma in cronogramas if cronograma['id']==id]
         if not cronograma_encontrado:
@@ -35,16 +47,3 @@ class CronogramaIdUrl(Resource):
         cronogramas = [cronograma for cronograma in cronogramas if cronograma['id']!=id]
         return {'message': 'deleted'}
     
-    
-class Cronograma(Resource):
-    def post(sef):
-        argumentos = reqparse.RequestParser()
-        argumentos.add_argument('id')
-        argumentos.add_argument('nome')
-        dados = argumentos.parse_args()
-        cronograma_objeto = CronogramaModel(
-            id=dados['id'], nome=dados['nome']
-        )
-        novo_cronograma = cronograma_objeto.json()
-        cronogramas.append(novo_cronograma)
-        return novo_cronograma, 201
