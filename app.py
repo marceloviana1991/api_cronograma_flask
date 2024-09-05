@@ -9,11 +9,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 api = Api(app)
 
+
 caminho_arquivo = "instance/banco.db"
-if not(os.path.exists(caminho_arquivo)):
-    @app.before_request
-    def cria_banco():
-        banco.create_all()
+first_resquest = True
+@app.before_request
+def cria_banco():
+    if first_resquest:
+        first_resquest = False
+        if not(os.path.exists(caminho_arquivo)):
+            banco.create_all()
+
 
 api.add_resource(Cronogramas, '/cronogramas')
 api.add_resource(CronogramasId, '/cronogramas/<int:id>')
