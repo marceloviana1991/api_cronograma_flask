@@ -19,14 +19,17 @@ class Eventos(Resource):
         argumentos.add_argument('dia')
         argumentos.add_argument('id_cronograma')
         dados = argumentos.parse_args()
+        id = dados['id']
+        if EventoModel.find_evento(id):
+            return {'message': f'Evento id: {id} already exists'}, 400
         evento_objeto = EventoModel(
             id=dados['id'],
             texto=dados['texto'],
             dia=dados['dia'],
             id_cronograma=dados['id_cronograma']
         )
+        evento_objeto.save_evento()
         novo_evento = evento_objeto.json()
-        eventos.append(novo_evento)
         return novo_evento, 201
     
 

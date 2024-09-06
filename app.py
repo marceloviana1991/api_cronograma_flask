@@ -11,13 +11,11 @@ api = Api(app)
 
 
 caminho_arquivo = "instance/banco.db"
-first_resquest = True
 @app.before_request
 def cria_banco():
-    if first_resquest:
-        first_resquest = False
         if not(os.path.exists(caminho_arquivo)):
             banco.create_all()
+        
 
 
 api.add_resource(Cronogramas, '/cronogramas')

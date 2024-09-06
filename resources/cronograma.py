@@ -17,11 +17,14 @@ class Cronogramas(Resource):
         argumentos.add_argument('id')
         argumentos.add_argument('nome')
         dados = argumentos.parse_args()
+        id = dados['id']
+        if CronogramaModel.find_cronograma(id):
+            return {'message': f'Cronograma id: {id} already exists'}, 400
         cronograma_objeto = CronogramaModel(
             id=dados['id'], nome=dados['nome']
         )
+        cronograma_objeto.save_cronograma()
         novo_cronograma = cronograma_objeto.json()
-        cronogramas.append(novo_cronograma)
         return novo_cronograma, 201
     
 
