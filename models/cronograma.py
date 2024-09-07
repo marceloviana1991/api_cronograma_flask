@@ -10,6 +10,7 @@ class CronogramaModel(banco.Model):
     def __init__(self, id, nome):
         self.id = int(id)
         self.nome = nome
+        self.eventos = []
 
     def json(self):
         return {
@@ -27,4 +28,6 @@ class CronogramaModel(banco.Model):
     def save_cronograma(self):
         banco.session.add(self)
         banco.session.commit()
+
+    
     

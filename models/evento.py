@@ -8,6 +8,7 @@ class EventoModel(banco.Model):
     texto = banco.Column('texto', banco.String(160))
     dia = banco.Column('dia', banco.String(40))
     id_cronograma = banco.Column('id_cronograma', banco.BigInteger, banco.ForeignKey('cronogramas.id'))
+    cronograma = banco.relationship('CronogramaModel', backref=banco.backref('eventos', lazy='joined'))
 
     def __init__(self, id, texto, dia, id_cronograma):
         self.id = int(id)

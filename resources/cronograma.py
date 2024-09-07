@@ -30,10 +30,10 @@ class Cronogramas(Resource):
 
 class CronogramasId(Resource):
     def get(self, id):
-        cronograma_encontrado = [cronograma for cronograma in cronogramas if cronograma['id']==id]
+        cronograma_encontrado = CronogramaModel.find_cronograma(id)
         if not cronograma_encontrado:
             return {'message': 'not found'}, 404
-        return cronograma_encontrado[0]
+        return cronograma_encontrado.json()
     
     def put(self, id):
         cronograma_encontrado = [cronograma for cronograma in cronogramas if cronograma['id']==id]
