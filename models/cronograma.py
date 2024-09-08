@@ -29,5 +29,10 @@ class CronogramaModel(banco.Model):
         banco.session.add(self)
         banco.session.commit()
 
+    def update_cronograma(self, nome):
+        self.nome = nome
+        
+
+
     
     

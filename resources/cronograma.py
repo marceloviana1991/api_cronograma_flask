@@ -36,14 +36,15 @@ class CronogramasId(Resource):
         return cronograma_encontrado.json()
     
     def put(self, id):
-        cronograma_encontrado = [cronograma for cronograma in cronogramas if cronograma['id']==id]
+        cronograma_encontrado = CronogramaModel.find_cronograma(id)
         if not cronograma_encontrado:
             return {'message': 'not found'}, 404
         argumentos = reqparse.RequestParser()
         argumentos.add_argument('nome')
         dados = argumentos.parse_args()
-        cronograma_encontrado[0]['nome'] = dados['nome']
-        return cronograma_encontrado[0]
+        cronograma_encontrado.update_cronograma(nome=dados['nome'])
+        cronograma_encontrado.save_cronograma()
+        return cronograma_encontrado.json()
     
     def delete(self, id):
         global cronogramas

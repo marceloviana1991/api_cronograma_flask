@@ -47,16 +47,19 @@ class EventosId(Resource):
         return evento_encontrado.json()
     
     def put(self, id):
-        evento_encontrado = [evento for evento in eventos if evento['id']==id]
+        evento_encontrado = EventoModel.find_evento(id)
         if not evento_encontrado:
             return {'message': 'not found'}, 404
         argumentos = reqparse.RequestParser()
         argumentos.add_argument('texto')
         argumentos.add_argument('dia')
         dados = argumentos.parse_args()
-        evento_encontrado[0]['texto'] = dados['texto']
-        evento_encontrado[0]['dia'] = dados['dia']
-        return evento_encontrado[0]
+        evento_encontrado.update_evento(
+            texto=dados['texto'],
+            dia=dados['dia']
+        )
+        evento_encontrado.save_evento()
+        return evento_encontrado.json()
     
     def delete(self, id):
         global eventos
