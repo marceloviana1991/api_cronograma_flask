@@ -8,8 +8,8 @@ class Cronogramas(Resource):
     
     def post(sef):
         argumentos = reqparse.RequestParser()
-        argumentos.add_argument('id')
-        argumentos.add_argument('nome')
+        argumentos.add_argument('id', type=int)
+        argumentos.add_argument('nome', required=True, help="The field 'nome' cannot is null")
         dados = argumentos.parse_args()
         id = dados['id']
         if CronogramaModel.find_cronograma(id):
@@ -17,7 +17,10 @@ class Cronogramas(Resource):
         cronograma_objeto = CronogramaModel(
             id=dados['id'], nome=dados['nome']
         )
-        cronograma_objeto.save_cronograma()
+        try:
+            cronograma_objeto.save_cronograma()
+        except:
+            return {'message': 'An internal error'}, 500
         novo_cronograma = cronograma_objeto.json()
         return novo_cronograma, 201
     
@@ -37,13 +40,19 @@ class CronogramasId(Resource):
         argumentos.add_argument('nome')
         dados = argumentos.parse_args()
         cronograma_encontrado.update_cronograma(nome=dados['nome'])
-        cronograma_encontrado.save_cronograma()
+        try:
+            cronograma_encontrado.save_cronograma()
+        except:
+            return {'message': 'An internal error'}, 500
         return cronograma_encontrado.json()
     
     def delete(self, id):
         cronograma_encontrado = CronogramaModel.find_cronograma(id)
         if cronograma_encontrado:
-            cronograma_encontrado.delete_cronograma()
+            try:
+                cronograma_encontrado.delete_cronograma()
+            except:
+                return {'message': 'An internal error'}, 500
             return {'message': 'deleted'}
         return {'message': 'not found'}, 404
     

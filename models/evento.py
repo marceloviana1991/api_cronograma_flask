@@ -1,5 +1,6 @@
 from sql_alchemy import banco
-
+from sqlalchemy.orm import Mapped
+from models.cronograma import CronogramaModel
 
 class EventoModel(banco.Model):
     __tablename__ = 'eventos'
@@ -8,13 +9,13 @@ class EventoModel(banco.Model):
     texto = banco.Column('texto', banco.String(160))
     dia = banco.Column('dia', banco.String(40))
     id_cronograma = banco.Column('id_cronograma', banco.BigInteger, banco.ForeignKey('cronogramas.id'))
-    cronograma = banco.relationship('CronogramaModel', backref=banco.backref('eventos', lazy='joined'))
+    cronograma: Mapped[CronogramaModel] = banco.relationship('CronogramaModel', backref='eventos', lazy='joined')
 
     def __init__(self, id, texto, dia, id_cronograma):
-        self.id = int(id)
+        self.id = id
         self.texto = texto
         self.dia = dia
-        self.id_cronograma = int(id_cronograma)
+        self.id_cronograma = id_cronograma
 
     def json(self):
         return {

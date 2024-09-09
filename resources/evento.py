@@ -9,10 +9,10 @@ class Eventos(Resource):
     
     def post(self):
         argumentos = reqparse.RequestParser()
-        argumentos.add_argument('id')
+        argumentos.add_argument('id', type=int)
         argumentos.add_argument('texto')
         argumentos.add_argument('dia')
-        argumentos.add_argument('id_cronograma')
+        argumentos.add_argument('id_cronograma',type=int)
         dados = argumentos.parse_args()
         id = dados['id']
         id_cronograma = dados['id_cronograma']
@@ -28,7 +28,10 @@ class Eventos(Resource):
             id_cronograma=dados['id_cronograma']
         )
         cronograma_encontrado.eventos.append(evento_objeto)
-        evento_objeto.save_evento()
+        try:
+            evento_objeto.save_evento()
+        except:
+            return {'message': 'An internal error'}, 500
         novo_evento = evento_objeto.json()
         return novo_evento, 201
     
@@ -52,13 +55,19 @@ class EventosId(Resource):
             texto=dados['texto'],
             dia=dados['dia']
         )
-        evento_encontrado.save_evento()
+        try:
+            evento_encontrado.save_evento()
+        except:
+            return {'message': 'An internal error'}, 500
         return evento_encontrado.json()
     
     def delete(self, id):
         evento_encontrado = EventoModel.find_evento(id)
         if evento_encontrado:
-            evento_encontrado.delete_evento()
+            try:
+                evento_encontrado.delete_evento()
+            except:
+                return {'message': 'An internal error'}, 500
             return {'message': 'deleted'}
         return {'message': 'not found'}, 404
         
