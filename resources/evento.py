@@ -3,15 +3,9 @@ from models.evento import EventoModel
 from models.cronograma import CronogramaModel
 
 
-eventos = [
-    {'id': 1, 'texto': 'fazer caminhada', 'dia': 'quarta-feira', 'id_cronograma': 1},
-    {'id': 2, 'texto': 'lavar a cozina', 'dia': 'sabado', 'id_cronograma': 2}
-]
-
-
 class Eventos(Resource):
     def get(self):
-        return {'eventos': eventos}
+        return {'eventos': [evento.json() for evento in EventoModel.query.all()]}
     
     def post(self):
         argumentos = reqparse.RequestParser()
@@ -62,6 +56,9 @@ class EventosId(Resource):
         return evento_encontrado.json()
     
     def delete(self, id):
-        global eventos
-        eventos = [evento for evento in eventos if evento['id']!=id]
-        return {'message': 'deleted'}
+        evento_encontrado = EventoModel.find_evento(id)
+        if evento_encontrado:
+            evento_encontrado.delete_evento()
+            return {'message': 'deleted'}
+        return {'message': 'not found'}, 404
+        

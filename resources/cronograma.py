@@ -2,15 +2,9 @@ from flask_restful import Resource, reqparse
 from models.cronograma import CronogramaModel
 
 
-cronogramas = [
-    {"id" : 1, 'nome':'atividade fisica'},
-    {"id" : 2, 'nome':'atividades domesticas'}
-]
-
-
 class Cronogramas(Resource):
     def get(self):
-        return {'cronogramas': cronogramas}
+        return {'cronogramas': [cronograma.json() for cronograma in CronogramaModel.query.all()]}
     
     def post(sef):
         argumentos = reqparse.RequestParser()
@@ -47,7 +41,9 @@ class CronogramasId(Resource):
         return cronograma_encontrado.json()
     
     def delete(self, id):
-        global cronogramas
-        cronogramas = [cronograma for cronograma in cronogramas if cronograma['id']!=id]
-        return {'message': 'deleted'}
+        cronograma_encontrado = CronogramaModel.find_cronograma(id)
+        if cronograma_encontrado:
+            cronograma_encontrado.delete_cronograma()
+            return {'message': 'deleted'}
+        return {'message': 'not found'}, 404
     

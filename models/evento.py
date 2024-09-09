@@ -38,3 +38,7 @@ class EventoModel(banco.Model):
     def update_evento(self, texto, dia):
         self.texto = texto
         self.dia = dia
+
+    def delete_evento(self):
+        banco.session.delete(self)
+        banco.session.commit()
